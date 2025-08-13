@@ -5,9 +5,13 @@ module.exports = (sequelize, DataTypes) => {
     class FilePermission extends Model {
         static associate(models) {
 
-            FilePermission.belongsTo(models.File);
+            FilePermission.belongsTo(models.File,{
+                foreignKey: 'file_id'
+            });
 
-            FilePermission.belongsTo(models.User);
+            FilePermission.belongsTo(models.User, {
+                foreignKey: 'user_id'
+            });
         }
     }
 
@@ -16,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: 'File',
+                model: 'files',
                 key: 'id'
             }
         },
@@ -29,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true, // set to false if you require authentication
             references: {
-                model: 'Users',
+                model: 'users',
                 key: 'id'
             }
         }

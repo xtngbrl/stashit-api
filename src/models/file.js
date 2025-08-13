@@ -21,15 +21,21 @@ module.exports = (sequelize, DataTypes) => {
         as: 'shares'
       });
 
+      File.hasMany(models.Thumbnail, {
+        foreignKey: 'file_id' 
+      })
+
      // File Tagging 
       File.belongsToMany(models.Tag, {
-          through: models.FileTag
+          through: models.FileTag,
+          foreignKey: 'file_id'
       });
 
       // Folder Assoc
       File.belongsTo(models.Folder, {
         foreignKey: 'folder_id'
       });
+
     }
   }
 
@@ -59,14 +65,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     firebase_url: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false
     },
     uploaded_by: {
       type: DataTypes.INTEGER,
       allowNull: true, // set to false if you require authentication
       references: {
-        model: 'Users',
+        model: 'users',
         key: 'id'
       }
     },
@@ -74,14 +80,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
         references: {
-            model: 'Folders',
+            model: 'folders',
             key: 'id'
         }
     },
-    deleted_at: {
-        type: DataTypes.DATE,
-        allowNull: true
-    }
   }, {
     sequelize,
     modelName: 'File',

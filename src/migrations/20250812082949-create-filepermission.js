@@ -13,9 +13,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'File',
+            model: 'files',
             key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       permission: {
         type: Sequelize.ENUM('read', 'write', 'owner'),
@@ -26,7 +27,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true, // set to false if you require authentication
         references: {
-            model: 'Users',
+            model: 'users',
             key: 'id'
         }
       },

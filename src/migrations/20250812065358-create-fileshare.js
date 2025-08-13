@@ -9,53 +9,50 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      filename: {
-      type: Sequelize.STRING,
-      allowNull: false
+      file_id: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          references: {
+              model: 'files',
+              key: 'id'
+          },
+          onDelete: 'SET NULL'
       },
-      originalname: {
-        type: Sequelize.STRING,
-        allowNull: false
+      token: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          unique: true
       },
-      mimetype: {
-        type: Sequelize.STRING,
-        allowNull: false
+      permission: {
+          type: Sequelize.ENUM('read', 'write'),
+          allowNull: false,
+          defaultValue: 'read'
       },
-      size: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+      is_public: {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: true
       },
-      storage_key: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      storage_bucket: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      firebase_url: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      uploaded_by: {
-        type: Sequelize.INTEGER,
-        allowNull: true, // set to false if you require authentication
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
-      },
-      folder_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'Folders',
-            key: 'id'
-        }
-      },
-      deleted_at: {
+      expires_at: {
           type: Sequelize.DATE,
           allowNull: true
+      },
+      max_downloads: {
+          type: Sequelize.INTEGER,
+          allowNull: true
+      },
+      download_count: {
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 0
+      },
+      created_by: {
+          type: Sequelize.INTEGER,
+          allowNull: true, // set to false if you require authentication
+          references: {
+              model: 'users',
+              key: 'id'
+          }
       },
       createdAt: {
         allowNull: false,

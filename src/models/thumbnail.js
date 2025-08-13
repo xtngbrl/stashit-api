@@ -2,19 +2,16 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class FileTag extends Model {
+    class Thumbnail extends Model {
         static associate(models) {
-            FileTag.belongsTo(models.File, {
+           Thumbnail.belongsTo(models.File, {
                 foreignKey: 'file_id'
-            });
-
-            FileTag.belongsTo(models.Tag, {
-                foreignKey: 'tag_id'
-            });
+           })
+    
         }
     }
 
-    FileTag.init ({
+    Thumbnail.init ({
         file_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -23,19 +20,28 @@ module.exports = (sequelize, DataTypes) => {
                 key: 'id'
             }
         },
-        tag_id: {
+        label: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        url: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        width: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            references: {
-                model: 'tags',
-                key: 'id'
-            }
         },
+        height: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        }
+
     }, {
         sequelize,
-        modelName: 'FileTag',
-        tableName: 'file_tags',
+        modelName: 'Thumbnail',
+        tableName: 'thumbnails',
         timestamps: true,
     });
-    return FileTag;
+    return Thumbnail;
 }

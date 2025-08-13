@@ -2,14 +2,14 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('file_tags', {
+    await queryInterface.createTable('file_versions', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-       file_id: {
+      file_id: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
@@ -18,14 +18,25 @@ module.exports = {
           },
           onDelete: 'CASCADE'
       },
-      tag_id: {
+      version_number: {
           type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-              model: 'tags',
-              key: 'id'
-          },
-          onDelete: 'CASCADE'
+          allowNull: false
+      },
+      storage_key: {
+          type: Sequelize.STRING,
+          allowNull: true,
+      },
+      firebase_url: {
+          type: Sequelize.TEXT,
+          allowNull: true
+      },
+      size: {
+          type: Sequelize.INTEGER,
+          allowNull: false
+      },
+      mimetype: {
+          type: Sequelize.STRING,
+          allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +51,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('file_tags');
+    await queryInterface.dropTable('file_versions');
   }
 };

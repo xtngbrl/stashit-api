@@ -15,6 +15,10 @@ module.exports =  (sequelize, DataTypes) => {
             User.hasMany(models.FilePermission, {
                 foreignKey: 'user_id'
             });
+
+            User.hasMany(models.ActivityLog, {
+                foreignKey: 'user_id'
+            })
         }
     }
 

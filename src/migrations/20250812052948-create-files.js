@@ -34,26 +34,28 @@ module.exports = {
         allowNull: true
       },
       firebase_url: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false
       },
       uploaded_by: {
         type: Sequelize.INTEGER,
         allowNull: true, // set to false if you require authentication
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id'
-        }
+        },
+        onDelete: 'SET NULL'
       },
       folder_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
         references: {
-            model: 'Folders',
+            model: 'folders',
             key: 'id'
-        }
+        },
+        onDelete: 'SET NULL'
       },
-      deleted_at: {
+      deletedAt: {
           type: Sequelize.DATE,
           allowNull: true
       },

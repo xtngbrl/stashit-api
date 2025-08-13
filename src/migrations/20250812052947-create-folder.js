@@ -2,30 +2,33 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('file_tags', {
+    await queryInterface.createTable('folders', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-       file_id: {
-          type: Sequelize.INTEGER,
+      name: {
+          type: Sequelize.STRING,
           allowNull: false,
-          references: {
-              model: 'files',
-              key: 'id'
-          },
-          onDelete: 'CASCADE'
+          unique: true
       },
-      tag_id: {
+      owner_id: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
-              model: 'tags',
+              model: 'users',
               key: 'id'
-          },
-          onDelete: 'CASCADE'
+          }
+      },
+      parent_id: {
+          type: Sequelize.INTEGER,
+          allowNull: true,
+          references: {
+              model: 'folders',
+              key: 'id'
+          }
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +43,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('file_tags');
+    await queryInterface.dropTable('folders');
   }
 };
