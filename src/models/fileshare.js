@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         download_count: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
             defaultValue: 0
         },
         created_by: {

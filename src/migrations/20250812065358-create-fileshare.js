@@ -43,7 +43,7 @@ module.exports = {
       },
       download_count: {
           type: Sequelize.INTEGER,
-          allowNull: false,
+          allowNull: true,
           defaultValue: 0
       },
       created_by: {
