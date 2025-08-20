@@ -6,6 +6,12 @@ async function createTag(tagName) {
     });
 }
 
+async function updateTag(tagId, tagName) {
+    return await Tag.update({
+        name: tagName
+    }, {where: { id }});
+}
+
 async function deleteTag(id){
     return await Tag.destroy({where: { id }});
 }
@@ -16,6 +22,7 @@ async function getAllTags(){
 
 module.exports = {
     createTag,
+    updateTag,
     deleteTag,
     getAllTags
 }
