@@ -1,6 +1,6 @@
 // const fs = require('fs');
 // const path = require('path');
-const { File } = require('../models');
+const { File, FileVersion, FilePermissions, User } = require('../models');
 const { bucket } = require('../config/firebase');
 const { v4: uuidv4 } = require('uuid');
 
@@ -88,11 +88,87 @@ async function deleteFile(id) {
   await fileRecord.destroy();
 }
 
+
+//  Version Control Services
+async function getFileVersions(id) {
+  return await FileVersion.findAll({ where: { file_id: id } });
+}
+
+async function createFileVersion(id){
+  const fileRecord = await File.findByPk(id);
+  if (!fileRecord) throw new Error('File not found');
+
+  const versionCount = await FileVersion.count({ where: { file_id: id } });
+  const newVersionNumber = versionCount + 1;
+
+  return await FileVersion.create({
+    file_id: id,
+    version_number: newVersionNumber,
+    storage_key: fileRecord.storage_key,
+    firebase_url: fileRecord.firebase_url,
+    size: fileRecord.size,
+    mimetype: fileRecord.mimetype
+  });
+}
+
+async function deleteFileVersion(id){
+  const existingFileVersion = await FileVersion.findByPk(id);
+    if (!existingFileVersion) throw new Error('File version not found');
+  
+  await existingFileVersion.destroy();
+
+}
+
+
+// File Permission Services 
+async function getFilePermissions(fileId, userId) {
+  const existingFile = await FilePermissions.findAll({
+    where:{
+      file_id: fileId,
+      user_id: userId
+    },
+    include: [
+      {
+        model: User,
+        attributes: ['name', 'email', 'avatar_url']
+      }
+    ]
+  })
+  if (!existingFile) throw new Error('No permissions found for this user on the specified file');
+  return existingFile;
+}
+
+async function addFilePermission(fileId, userId, permission) {
+  return await FilePermissions.create({
+    file_id: fileId,
+    user_id: userId,
+    permission: permission
+  });
+}
+
+async function removeFilePermission(id) {
+  const existingPermission = await FilePermissions.findByPk(id);
+    if (!existingPermission) throw new Error('Permission not found');
+  
+  await existingPermission.destroy();
+}
+
 module.exports = {
   getAllFiles,
   getFileById,
   createFile,
   createUploadSession,
   finalizeUpload,
-  deleteFile
+  deleteFile,
+
+  // Exported Version Control Functions
+  getFileVersions,
+  createFileVersion,
+  deleteFileVersion,
+
+  // Exported Permission Functions
+  getFilePermissions,
+  addFilePermission,
+  removeFilePermission
+
 };
